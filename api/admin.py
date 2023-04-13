@@ -1,27 +1,27 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models import *
+from .models import Vertical, CoreMember
 
 
-@admin.register(Verticles)
-class VerticlesAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+@admin.register(Vertical)
+class VerticalAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('name', 'rank')
     list_filter = ('name',)
-    search_fields = ['name', 'rank']
+    search_fields = ['name',]
     ordering = ('rank',)
 
     class Meta:
-        model = Verticles
+        model = Vertical
         fields = '__all__'
 
 
-@admin.register(CoreTeam)
-class CoreTeamAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+@admin.register(CoreMember)
+class CoreMemberAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('name', 'position', 'email')
     list_filter = ('position',)
     search_fields = ['name', 'email', 'phone', 'position']
     ordering = ('position',)
 
     class Meta:
-        model = CoreTeam
+        model = CoreMember
         fields = '__all__'

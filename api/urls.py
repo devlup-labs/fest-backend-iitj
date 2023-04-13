@@ -1,13 +1,11 @@
 from django.urls import path, include
-from .models import *
-from .serializers import *
-from .views import *
-from rest_framework import routers, serializers, viewsets
+from .views import AllVerticalViewSet
+from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register('verticles', VerticlesViewSet)
-router.register('coreteam', CoreTeamViewSet)
+# router.register('vertical', AllVerticalViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('vertical/', AllVerticalViewSet.as_view(), name='vertical'),
 ]

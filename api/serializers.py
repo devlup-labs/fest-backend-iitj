@@ -1,13 +1,16 @@
 from rest_framework import serializers
-from .models import *
+from .models import Vertical, CoreMember
 
 
-class VerticlesSerializer(serializers.ModelSerializer):
+class CoreMemberSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Verticles
+        model = CoreMember
         fields = '__all__'
 
-class CoreTeamSerializer(serializers.ModelSerializer):
+
+class AllVerticalSerializer(serializers.ModelSerializer):
+    coremembers = CoreMemberSerializer(source='core_members', many=True, read_only=True)
+
     class Meta:
-        model = CoreTeam
-        fields = '__all__'
+        model = Vertical
+        fields = ('name', 'rank', 'coremembers')

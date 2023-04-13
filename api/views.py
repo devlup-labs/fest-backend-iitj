@@ -1,16 +1,14 @@
-from django.shortcuts import render
-from rest_framework import viewsets, permissions
-from .models import *
-from .serializers import *
+from rest_framework import permissions
+from .models import Vertical, CoreMember
+from .serializers import AllVerticalSerializer
+from django.db.models import Prefetch
+from rest_framework.generics import ListAPIView
 
 
-class VerticlesViewSet(viewsets.ModelViewSet):
-    queryset = Verticles.objects.all()
-    serializer_class = VerticlesSerializer
-    # permission_classes = [permissions.IsAuthenticated]
-
-
-class CoreTeamViewSet(viewsets.ModelViewSet):
-    queryset = CoreTeam.objects.all()
-    serializer_class = CoreTeamSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+class AllVerticalViewSet(ListAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = AllVerticalSerializer
+    model = Vertical
+    queryset = Vertical.objects.prefetch_related(
+        Prefetch('new_position', queryset=CoreMember.objects.all(), to_attr='core_members')
+    ).order_by('rank')
