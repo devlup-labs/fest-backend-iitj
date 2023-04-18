@@ -19,12 +19,18 @@ YEAR_CHOICES = (
     ('8', 'NA'),
 )
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    email = models.EmailField(unique=True, blank=False, null=False, verbose_name='Email', default='testing_email')
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, verbose_name='Gender', default='Male')
+    email = models.EmailField(unique=True,
+                              verbose_name='Email', default='testing_email')
+    gender = models.CharField(max_length=10,
+                              choices=GENDER_CHOICES,
+                              verbose_name='Gender', default='Male')
     contact = models.CharField(max_length=10, verbose_name='Contact')
-    current_year = models.CharField(max_length=20, choices=YEAR_CHOICES, verbose_name='Current Year of Study', default='1')
+    current_year = models.CharField(max_length=20,
+                                    choices=YEAR_CHOICES,
+                                    default='1')
     college = models.CharField(max_length=60, verbose_name='College Name')
     city = models.CharField(max_length=40, verbose_name='City')
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
@@ -32,4 +38,3 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.email
-
