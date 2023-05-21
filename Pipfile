@@ -7,6 +7,11 @@ name = "pypi"
 djangorestframework = "*"
 django = "*"
 python-decouple = "*"
+flake8-django = "*"
+django-import-export = "*"
+autopep8 = "*"
+pillow = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 
