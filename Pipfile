@@ -4,13 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-djangorestframework = "*"
 django = "*"
-python-decouple = "*"
+djangorestframework = "*"
 flake8-django = "*"
-
+python-decouple = "*"
+autopep8 = "*"
+django-import-export = "*"
+djangorestframework-simplejwt = "*"
+psycopg2-binary = "*"
+pillow = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = "3.11"
+python_full_version = "3.11.3"

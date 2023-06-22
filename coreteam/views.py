@@ -1,11 +1,12 @@
-from rest_framework import permissions
-from .models import Vertical, CoreMember
-from .serializers import AllVerticalSerializer
 from django.db.models import Prefetch
+from rest_framework import permissions
 from rest_framework.generics import ListAPIView
 
+from .models import CoreMember, Vertical
+from .serializers import AllVerticalSerializer
 
-class AllVerticalViewSet(ListAPIView):
+
+class AllVerticalsAPIView(ListAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = AllVerticalSerializer
     model = Vertical

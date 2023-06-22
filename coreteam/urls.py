@@ -1,11 +1,7 @@
-from django.urls import path, include
-from .views import AllVerticalViewSet
-from rest_framework import routers
+from django.urls import path
 
-router = routers.DefaultRouter()
-# router.register('vertical', AllVerticalViewSet)
+from .views import AllVerticalsAPIView
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('vertical/', AllVerticalViewSet.as_view(), name='vertical'),
+    path('', AllVerticalsAPIView.as_view(), name='coreteam'),
 ]
