@@ -7,8 +7,8 @@ class Sponsor(models.Model):
     sponsor_link = models.URLField(max_length=255)
     is_old = models.BooleanField(default=False)
 
-    def __str__(self):
-        return self.sponsor_name
-
     class Meta:
         app_label = 'sponsors'
+
+    def __str__(self):
+        return self.sponsor_name

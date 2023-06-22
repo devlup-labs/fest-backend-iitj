@@ -7,12 +7,12 @@ class Vertical(models.Model):
     name = models.CharField(max_length=100)
     rank = models.IntegerField()
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = 'Vertical'
         verbose_name_plural = 'Verticals'
+
+    def __str__(self):
+        return self.name
 
 
 class CoreMember(models.Model):
@@ -37,9 +37,9 @@ class CoreMember(models.Model):
     phone = models.CharField(max_length=10, blank=True, validators=[contact])
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = 'Core Member'
         verbose_name_plural = 'Core Members'
+
+    def __str__(self):
+        return self.name
