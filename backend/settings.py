@@ -79,8 +79,10 @@ else:
     }
 
     DATABASE_ROUTERS = [
-        'backend.db_routers.SQLiteRouter',
+        'backend.dbRouters.SQLiteRouter',
     ]
+
+AUTH_USER_MODEL = 'accounts.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {

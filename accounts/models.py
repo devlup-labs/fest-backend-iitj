@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 GENDER_CHOICES = (
@@ -19,28 +19,31 @@ YEAR_CHOICES = (
     ('8', 'NA'),
 )
 
+class User(AbstractUser):
+    profile_complete = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.email
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     email = models.EmailField(
         unique=True,
-        verbose_name='Email',
-        default='testing_email'
+        default='yuvraj@gmail.com'
     )
     gender = models.CharField(
         max_length=10,
         choices=GENDER_CHOICES,
-        verbose_name='Gender',
         default='Male'
     )
-    contact = models.CharField(max_length=10, verbose_name='Contact')
+    contact = models.CharField(max_length=10)
     current_year = models.CharField(
         max_length=20,
         choices=YEAR_CHOICES,
         default='1'
     )
-    college = models.CharField(max_length=60, verbose_name='College Name')
-    city = models.CharField(max_length=40, verbose_name='City')
+    college = models.CharField(max_length=60)
+    city = models.CharField(max_length=40)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
