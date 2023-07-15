@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import RegexValidator
 from django.db import models
 
 GENDER_CHOICES = (
@@ -20,32 +21,34 @@ YEAR_CHOICES = (
 )
 
 class User(AbstractUser):
+    google_picture = models.TextField(default='', blank=True)
+    is_google = models.BooleanField(default=False)
     profile_complete = models.BooleanField(default=False)
+    iitj = models.BooleanField(default=False)
 
     def __str__(self):
         return self.email
 
 class UserProfile(models.Model):
+    # Validators
+    valid_contact = RegexValidator(r'^[0-9]{10}$', message='Not a valid number!')
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    email = models.EmailField(
-        unique=True,
-        default='yuvraj@gmail.com'
-    )
     gender = models.CharField(
         max_length=10,
         choices=GENDER_CHOICES,
         default='Male'
     )
-    contact = models.CharField(max_length=10)
+    contact = models.CharField(max_length=10, validators=[valid_contact])
     current_year = models.CharField(
         max_length=20,
         choices=YEAR_CHOICES,
         default='1'
     )
-    college = models.CharField(max_length=60)
+    college = models.CharField(max_length=128)
     city = models.CharField(max_length=40)
-    created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.email
+        return self.user.email
