@@ -7,9 +7,9 @@ from .models import UserProfile, User
 # I want to register my Abstrated user model User in admin
 
 class UserProfileAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('contact', 'college')
+    list_display = ('user', 'contact', 'college')
     list_filter = ('college',)
-    search_fields = ['college', 'contact', 'city']
+    search_fields = ['user', 'college', 'contact', 'city']
     ordering = ('college',)
 
     class Meta:
