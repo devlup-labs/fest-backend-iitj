@@ -6,14 +6,16 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, Toke
 from .models import UserProfile
 
 User = get_user_model()
-# write coments in all classes
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer): 
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
 
         token['email'] = user.email
         return token
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
@@ -31,6 +33,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             'last_name': {'required': False}
         }
 
+
 class CookieTokenRefreshSerializer(TokenRefreshSerializer):
     refresh = None
 
@@ -41,12 +44,14 @@ class CookieTokenRefreshSerializer(TokenRefreshSerializer):
         else:
             raise exceptions.ParseError(
                 'No valid token found in cookie \'refresh\'')
-        
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "first_name", "last_name", "email", "google_picture", "is_google", "profile_complete", "iitj"]
-        
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile

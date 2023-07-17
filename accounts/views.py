@@ -2,18 +2,20 @@ import datetime
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from rest_framework import viewsets, generics, status
+from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import UserProfile 
+from .models import UserProfile
 from .serializers import MyTokenObtainPairSerializer, UserProfileSerializer, UserSerializer, RegisterSerializer, CookieTokenRefreshSerializer
 from .utils import get_tokens_for_user
 
 User = get_user_model()
 
+
 class MyObtainTokenPairView(TokenObtainPairView):
     permission_classes = (AllowAny,)
     serializer_class = MyTokenObtainPairSerializer
+
 
 class UserProfileViewSet(APIView):
     queryset = UserProfile.objects.all()
@@ -28,6 +30,7 @@ class UserProfileViewSet(APIView):
             profile.user.save()
             return Response(serializer.data)
         return Response(serializer.errors)
+
 
 class RegisterUserAPIView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
@@ -110,14 +113,16 @@ class RegisterUserAPIView(generics.CreateAPIView):
                 return Response({"Error": "This account is not active!!"}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response({"Error": "Invalid username or password!!"}, status=status.HTTP_404_NOT_FOUND)
-        
+
+
 class UserDetailAPI(APIView):
-    permission_classes = [IsAuthenticated] 
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         user = User.objects.get(id=request.user.id)
         serializer = UserSerializer(user)
         return Response(serializer.data)
+
 
 class UserProfileDetailsView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
@@ -133,7 +138,8 @@ class UserProfileDetailsView(generics.RetrieveAPIView):
             return Response({"user": userserializer.data, "userprofile": userprofileserializer.data})
         else:
             return Response({"Error": "User profile is not complete!!"}, status=status.HTTP_404_NOT_FOUND)
-        
+
+
 class CookieTokenRefreshView(TokenRefreshView):
     serializer_class = CookieTokenRefreshSerializer
 
@@ -150,4 +156,3 @@ class CookieTokenRefreshView(TokenRefreshView):
             )
 
         return super().finalize_response(request, response, *args, **kwargs)
-    

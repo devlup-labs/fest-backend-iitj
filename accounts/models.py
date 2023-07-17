@@ -20,6 +20,7 @@ YEAR_CHOICES = (
     ('8', 'NA'),
 )
 
+
 class User(AbstractUser):
     google_picture = models.TextField(default='', blank=True)
     is_google = models.BooleanField(default=False)
@@ -28,6 +29,7 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
 
 class UserProfile(models.Model):
     # Validators

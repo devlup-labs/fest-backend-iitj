@@ -1,3 +1,4 @@
 [flake8]
 max-line-length = 250
 exclude = backend/settings*, **/migrations/*, manage.py, .env*, .venv
+;  command for run flake8 `python -m flake8`
