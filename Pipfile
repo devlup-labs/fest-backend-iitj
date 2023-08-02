@@ -14,6 +14,8 @@ djangorestframework-simplejwt = "*"
 psycopg2-binary = "*"
 pillow = "*"
 psycopg2 = "*"
+django-ckeditor = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 

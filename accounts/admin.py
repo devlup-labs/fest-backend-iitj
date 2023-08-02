@@ -7,8 +7,8 @@ from .models import UserProfile, User
 
 
 class UserProfileAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('user', 'contact', 'college')
-    list_filter = ('college',)
+    list_display = ('user', 'contact', 'college', 'registration_code')
+    list_filter = ('college', 'amount_paid')
     search_fields = ['user', 'college', 'contact', 'city']
     ordering = ('college',)
 
