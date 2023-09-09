@@ -16,6 +16,7 @@ pillow = "*"
 psycopg2 = "*"
 django-ckeditor = "*"
 django-cors-headers = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 
