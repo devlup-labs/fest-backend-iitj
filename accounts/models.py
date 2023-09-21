@@ -72,7 +72,17 @@ def pre_save_user_profile(sender, instance, **kwargs):
         else:
             code = generate_registration_code('X' * (3 - len(name)) + name, count)
 
-        instance.registration_code = f"IG-{code}"
+        instance.registration_code = f"RC-{code}"
 
 
-pre_save.connect(pre_save_user_profile, sender=UserProfile)
+pre_save.connect(pre_save_user_profile, sender=UserProfile)  # to save before the UserProfile model is saved
+
+
+class BlacklistedEmail(models.Model):
+    email = models.EmailField()
+
+    def __str__(self) -> str:
+        return self.email
+
+    class Meta:
+        verbose_name_plural = "Blacklisted Emails"
