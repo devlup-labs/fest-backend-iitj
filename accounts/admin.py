@@ -1,9 +1,28 @@
 from django.contrib import admin
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ImportExportModelAdmin, ExportActionMixin
 from django.contrib.auth.admin import UserAdmin
 
 
-from .models import UserProfile, User
+from .models import UserProfile, User, BlacklistedEmail, PreRegistration
+
+
+class BlacklistedEmailAdmin(admin.ModelAdmin):
+    class Meta:
+        model = BlacklistedEmail
+
+
+admin.site.register(BlacklistedEmail, BlacklistedEmailAdmin)
+
+
+class PreRegistrationAdmin(ExportActionMixin, admin.ModelAdmin):
+    list_display = ('full_name', 'email', 'contact', 'college', 'current_year', 'city')
+    list_filter = ('college', 'current_year', 'city')
+
+    class Meta:
+        model = PreRegistration
+
+
+admin.site.register(PreRegistration, PreRegistrationAdmin)
 
 
 class UserProfileAdmin(ImportExportModelAdmin, admin.ModelAdmin):

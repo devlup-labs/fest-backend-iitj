@@ -2,11 +2,11 @@ import datetime
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from rest_framework import generics, status
+from rest_framework import generics, status, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import UserProfile
-from .serializers import MyTokenObtainPairSerializer, UserProfileSerializer, UserSerializer, RegisterSerializer, CookieTokenRefreshSerializer
+from .models import UserProfile, PreRegistration
+from .serializers import MyTokenObtainPairSerializer, UserProfileSerializer, UserSerializer, RegisterSerializer, CookieTokenRefreshSerializer, PreRegistrationSerializer
 from .utils import get_tokens_for_user
 
 User = get_user_model()
@@ -15,6 +15,11 @@ User = get_user_model()
 class MyObtainTokenPairView(TokenObtainPairView):
     permission_classes = (AllowAny,)
     serializer_class = MyTokenObtainPairSerializer
+
+
+class PreRegistrationAPIView(viewsets.ModelViewSet):
+    queryset = PreRegistration.objects.all()
+    serializer_class = PreRegistrationSerializer
 
 
 class UserProfileViewSet(APIView):
