@@ -1,5 +1,6 @@
+import os
 from pathlib import Path
-
+from datetime import timedelta
 from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,6 +11,8 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 DEVELOPMENT = config('DEVELOPMENT', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['*']
+BASE_FRONTEND_URL = config('BASE_FRONTEND_URL', default="http://localhost:3000")
+BASE_BACKEND_URL = config('BASE_BACKEND_URL', default="http://localhost:8000")
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -19,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     'import_export',
     'accounts',
     'events',
@@ -43,10 +47,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'backend.urls'
 
+APP_SECRET = config('APP_SECRET')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'frontend')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -109,6 +115,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+DEFAULT_FROM_EMAIL = '"Festival, IIT Jodhpur" <no-reply@festival@iitj.co.in>'
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_PORT = config("EMAIL_PORT")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Kolkata'
@@ -119,11 +134,31 @@ USE_L10N = True
 
 USE_TZ = True
 
+STATIC_ROOT = os.path.join(BASE_DIR, config('STATIC_PATH', default='staticfiles', cast=str))  # type: ignore
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DEFAULT_PROFILE_IMAGE_URL = config("DEFAULT_PROFILE_IMAGE_URL")
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Rest Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'registration.authenticate.CustomAuthentication',
+    ],
+}
+
+# Simple JWT
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
+    'ROTATE_REFRESH_TOKENS': False,
+}
 
 # CKEditor
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -169,3 +204,8 @@ CKEDITOR_CONFIGS = {
         ]),
     },
 }
+
+
+# Google OAuth2 settings
+GOOGLE_OAUTH2_CLIENT_ID = config('DJANGO_GOOGLE_OAUTH2_CLIENT_ID', cast=str)
+GOOGLE_OAUTH2_CLIENT_SECRET = config('DJANGO_GOOGLE_OAUTH2_CLIENT_SECRET', cast=str)
