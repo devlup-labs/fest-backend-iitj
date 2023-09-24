@@ -1,4 +1,17 @@
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import serializers, exceptions
+from django.contrib.auth import get_user_model
+from rest_framework.validators import UniqueValidator
+from django.contrib.auth.password_validation import validate_password
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
+from .models import UserProfile, PreRegistration
+
+User = get_user_model()
+
+
+class PreRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PreRegistration
+        fields = ['email', 'full_name', 'contact', 'college', 'city', 'current_year']
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -8,3 +21,44 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         token['email'] = user.email
         return token
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        required=True,
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password])
+
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'email', 'first_name', 'last_name')
+        extra_kwargs = {
+            'first_name': {'required': True},
+            'last_name': {'required': False}
+        }
+
+
+class CookieTokenRefreshSerializer(TokenRefreshSerializer):
+    refresh = None
+
+    def validate(self, attrs):
+        attrs['refresh'] = self.context['request'].COOKIES.get('refresh')
+        if attrs['refresh']:
+            return super().validate(attrs)
+        else:
+            raise exceptions.ParseError(
+                'No valid token found in cookie \'refresh\'')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "first_name", "last_name", "email", "google_picture", "is_google", "profile_complete", "iitj"]
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ["user", "gender", "contact", "current_year", "college",  "city", "amount_paid", "flagship", "created_at", "updated_at"]
