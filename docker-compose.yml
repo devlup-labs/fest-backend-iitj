@@ -1,0 +1,54 @@
+version: '3'
+services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ufb
+    container_name: ufb-django-backend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - DB_HOST=postgresqldb
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+    depends_on:
+      - postgresqldb
+    networks:
+      - app-network
+    command:
+      - /bin/sh
+      - -c
+      - |
+        python manage.py makemigrations
+        python manage.py migrate
+        python manage.py runserver 0.0.0.0:8000
+  postgresqldb:
+      image: 'bitnami/postgresql:latest'
+      container_name: ufb-postgresql-db
+      restart: unless-stopped
+      env_file: .env
+      environment:
+        - POSTGRESQL_USERNAME=$POSTGRES_DB_USER
+        - POSTGRESQL_PASSWORD=$POSTGRES_DB_PASSWORD
+        - POSTGRESQL_DATABASE=$POSTGRES_DB_NAME
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U $POSTGRES_DB_USER"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+      volumes:
+        - dbdata:/bitnami/postgresql
+      networks:
+        - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+  
