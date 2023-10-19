@@ -146,12 +146,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Rest Framework
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'registration.authenticate.CustomAuthentication',
-    ],
-}
+# # Rest Framework
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'registration.authenticate.CustomAuthentication',
+#     ],
+# }
 
 # Simple JWT
 SIMPLE_JWT = {
